@@ -1,0 +1,55 @@
+Sub easy_soln()
+
+Dim column As Integer
+Dim columnG As Integer
+Dim current_stock_total As Double
+Dim xrow As Integer
+column = 1
+columnG = 7
+
+Dim wrksht As Worksheet
+Set wrksht = ActiveWorkbook.Worksheets("2014")
+
+
+'insert "Ticker" column to I
+'insert "Total volume column to J"
+Cells(1, 9).Value = "Ticker"
+Cells(1, 10).Value = "Total Stock Volume"
+
+'for each tab year 2014, 2015 & 2016
+'for loop searching for every transition of column A, and record the value in column I, using a short range to start off
+For i = 2 To 10000
+
+       
+    If Cells(i + 1, column).Value <> Cells(i, column).Value Then
+        'MsgBox ("current value: " & Cells(i, column).Value & " Next Value: " & Cells(i + 1, column).Value)
+        'MsgBox xrow
+        'populate Column I with values
+        xrow = wrksht.Cells(Rows.Count, 9).End(xlUp).Offset(1, 0).Row
+        Cells(xrow, 9).Value = Cells(i, column).Value
+        'combine associated values of column G and record them in column J
+        current_stock_total = current_stock_total + Cells(i, columnG).Value
+        'Range("J" & xrow).Value = current_stock_total
+        Cells(xrow, 10).Value = current_stock_total
+        
+        'Add one to the xrow
+          'xrow = xrow + 1
+          
+          ' Reset the stock Total
+          current_stock_total = 0
+    
+        ' If the cell immediately following a row is the same stock...
+    Else
+
+      ' Add to the stock Total
+      current_stock_total = current_stock_total + Cells(i, columnG).Value
+
+    
+    
+    End If
+       
+
+Next i
+
+
+End Sub

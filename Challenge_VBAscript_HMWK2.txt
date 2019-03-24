@@ -1,0 +1,56 @@
+Sub challenge()
+
+Dim column As Integer
+Dim columnG As Integer
+Dim current_stock_total As Double
+Dim xrow As Integer
+column = 1
+columnG = 7
+
+Dim Current As Worksheet
+' Loop through all of the worksheets in the active workbook.
+For Each Current In Worksheets
+
+'insert "Ticker" column to I
+'insert "Total volume column to J"
+Current.Cells(1, 9).Value = "Ticker"
+Current.Cells(1, 10).Value = "Total Stock Volume"
+
+'for each tab year 2014, 2015 & 2016
+'for loop searching for every transition of column A, and record the value in column I, using a short range to start off
+For i = 2 To 797711
+
+       
+    If Current.Cells(i + 1, column).Value <> Current.Cells(i, column).Value Then
+    'MsgBox ("current value: " & Cells(i, column).Value & " Next Value: " & Cells(i + 1, column).Value)
+    'MsgBox xrow
+    'populate Column I with values
+    xrow = Current.Cells(Rows.Count, 9).End(xlUp).Offset(1, 0).Row
+    Current.Cells(xrow, 9).Value = Current.Cells(i, column).Value
+    'combine associated values of column G and record them in column J
+    current_stock_total = current_stock_total + Current.Cells(i, columnG).Value
+    'Range("J" & xrow).Value = current_stock_total
+    Current.Cells(xrow, 10).Value = current_stock_total
+    
+    'Add one to the xrow
+      'xrow = xrow + 1
+      
+      ' Reset the stock Total
+      current_stock_total = 0
+
+    ' If the cell immediately following a row is the same stock...
+    Else
+
+      ' Add to the stock Total
+      current_stock_total = current_stock_total + Current.Cells(i, columnG).Value
+
+    
+    
+    End If
+       
+
+Next i
+
+Next
+
+End Sub

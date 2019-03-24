@@ -1,0 +1,72 @@
+Sub moderate()
+Dim wrksht As Worksheet
+Set wrksht = ActiveWorkbook.Worksheets("2016")
+Dim column As Integer
+Dim columnG As Integer
+Dim volume As Double
+Dim xrow As Integer
+column = 1
+columnG = 7
+Dim startprice As Double
+Dim yearprice As Double
+
+
+
+'insert "Ticker" column to I, "Yearly Change" = column J, "Percent Change" column K,
+'insert "Total volume column to L"
+Cells(1, 9).Value = "Ticker"
+Cells(1, 10).Value = "Yearly Change"
+Cells(1, 11).Value = "Percent Change"
+Cells(1, 12).Value = "Total Stock Volume"
+
+'for each tab year 2014, 2015 & 2016
+'for loop searching for every transition of column A, and record the value in column I, using a short range to start off
+For i = 2 To 10000
+
+       
+    If Cells(i - 1, column).Value <> Cells(i, column).Value Then
+        'then you are at the beginning
+        startprice = Cells(i, 3).Value
+        volume = Cells(i, 7).Value
+        
+        
+    Else
+        'if cell i does not equal i+1 then you are at the end
+        volume = volume + Cells(i, 7).Value
+    
+        If Cells(i + 1, column).Value <> Cells(i, column).Value Then
+        'MsgBox ("current value: " & Cells(i, column).Value & " Next Value: " & Cells(i + 1, column).Value)
+        'MsgBox xrow
+        'populate Column I with values:
+            xrow = wrksht.Cells(Rows.Count, 9).End(xlUp).Offset(1, 0).Row
+            Cells(xrow, 9).Value = Cells(i, column).Value
+            
+            'populate Column J with values:
+            endprice = Cells(i, 6).Value
+            MsgBox (endprice)
+            Cells(xrow, 10).Value = endprice - startprice
+               
+                If Cells(xrow, 10).Value > 0 Then
+                Cells(xrow, 10).Interior.ColorIndex = 4
+                ElseIf Cells(xrow, 10).Value < 0 Then
+                Cells(xrow, 10).Interior.ColorIndex = 3
+                
+                End If
+                
+            'populate column K with values:
+            Cells(xrow, 11).Value = ((endprice - startprice) / startprice)
+      
+            'Range("L" & xrow).Value = current_stock_total
+            Cells(xrow, 12).Value = volume
+            
+        End If
+
+    End If
+    
+Next i
+
+
+End Sub
+
+
+
